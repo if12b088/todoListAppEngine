@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee 
+              http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	version="2.5" xmlns="http://java.sun.com/xml/ns/javaee">
+
+	<!-- Servlets -->
+	<servlet>
+		<servlet-name>CreateNewTodo</servlet-name>
+		<servlet-class>at.technikum.wien.clad.gae.todo.server.CreateTodoServiceImpl</servlet-class>
+	</servlet>
+	<servlet>
+		<servlet-name>FinishTodo</servlet-name>
+		<servlet-class>at.technikum.wien.clad.gae.todo.server.FinishTodoServiceImpl</servlet-class>
+	</servlet>
+		<servlet>
+		<servlet-name>CreateUser</servlet-name>
+		<servlet-class>at.technikum.wien.clad.gae.todo.server.CreateUserServiceImpl</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>FinishTodo</servlet-name>
+		<url-pattern>/done</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>CreateNewTodo</servlet-name>
+		<url-pattern>/new</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>CreateUser</servlet-name>
+		<url-pattern>/newUser</url-pattern>
+	</servlet-mapping>
+
+	<!-- Default page to serve -->
+	<welcome-file-list>
+		<welcome-file>TodoApplication.jsp</welcome-file>
+	</welcome-file-list>
+
+</web-app>
