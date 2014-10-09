@@ -20,11 +20,11 @@
   <!-- Other module inherits                                      -->
 
   <!-- Specify the app entry point class.                         -->
-  <entry-point class='at.technikum.wien.clad.gae.todo.client.Todo'/>
+ <!-- <entry-point class='at.technikum.wien.clad.gae.todo.client.Todo'/>-->
 
   <!-- Specify the paths for translatable code                    -->
-  <source path='client'/>
-  <source path='shared'/>
+  <!-- <source path='client'/>
+  <source path='shared'/> -->
 
   <!-- allow Super Dev Mode -->
   <add-linker name="xsiframe"/>

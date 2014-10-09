@@ -1,2 +1,3 @@
 # Module todo
 # RPC service class, partial path of RPC policy file
+at.technikum.wien.clad.gae.todo.client.GreetingService, 4FD6A353135B9D1B5E1D880F6D5BE239.gwt.rpc

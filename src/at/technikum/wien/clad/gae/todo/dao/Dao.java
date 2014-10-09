@@ -1,7 +1,5 @@
 package at.technikum.wien.clad.gae.todo.dao;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
@@ -12,8 +10,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
 import at.technikum.wien.clad.gae.todo.model.Todo;
-
-import com.google.gwt.dev.util.collect.Lists;
 
 public enum Dao {
 	INSTANCE;

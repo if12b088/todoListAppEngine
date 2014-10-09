@@ -30,6 +30,15 @@
 		<servlet-name>AssignTodo</servlet-name>
 		<url-pattern>/assign</url-pattern>
 	</servlet-mapping>
+	<!-- Email -->
+	  <servlet>
+    <servlet-name>Email</servlet-name>
+    <servlet-class>at.technikum.wien.clad.gae.todo.server.EmailServiceImpl</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Email</servlet-name>
+    <url-pattern>/_ah/mail/*</url-pattern>
+  </servlet-mapping>
 
 	<!-- Default page to serve -->
 	<welcome-file-list>
