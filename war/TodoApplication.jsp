@@ -126,6 +126,7 @@
 			<th>Short description</th>
 			<th>Long Description</th>
 			<th>URL</th>
+			<th>Reassign</th>
 		</tr>
 
 		<%
@@ -136,6 +137,21 @@
 			<td><%=todo.getShortDescription()%></td>
 			<td><%=todo.getLongDescription()%></td>
 			<td><%=todo.getUrl()%></td>
+			<td>
+				<form action="/assign" method="post" accept-charset="utf-8">
+					<select name="reassign">
+						<%
+							for (String u : users) {
+						%>
+						<option><%=u%></option>
+						<%
+							}
+						%>
+					</select>
+					<input name="id" type="hidden" value="<%=todo.getId()%>" >
+					<input type="submit" value="Reassign" />
+				</form>
+			</td>
 		</tr>
 		<%
 			}
