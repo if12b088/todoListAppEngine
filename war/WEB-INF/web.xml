@@ -13,9 +13,9 @@
 		<servlet-name>FinishTodo</servlet-name>
 		<servlet-class>at.technikum.wien.clad.gae.todo.server.FinishTodoServiceImpl</servlet-class>
 	</servlet>
-		<servlet>
-		<servlet-name>CreateUser</servlet-name>
-		<servlet-class>at.technikum.wien.clad.gae.todo.server.CreateUserServiceImpl</servlet-class>
+	<servlet>
+		<servlet-name>AssignTodo</servlet-name>
+		<servlet-class>at.technikum.wien.clad.gae.todo.server.AssignTodoServiceImpl</servlet-class>
 	</servlet>
 
 	<servlet-mapping>
@@ -27,8 +27,8 @@
 		<url-pattern>/new</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
-		<servlet-name>CreateUser</servlet-name>
-		<url-pattern>/newUser</url-pattern>
+		<servlet-name>AssignTodo</servlet-name>
+		<url-pattern>/assign</url-pattern>
 	</servlet-mapping>
 
 	<!-- Default page to serve -->

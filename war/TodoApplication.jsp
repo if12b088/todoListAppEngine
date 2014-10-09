@@ -1,6 +1,7 @@
 <%@page import="java.util.Collection"%>
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <%@ page import="java.util.List"%>
+<%@ page import="java.util.Set"%>
 <%@ page import="com.google.appengine.api.users.User"%>
 <%@ page import="com.google.appengine.api.users.UserService"%>
 <%@ page import="com.google.appengine.api.users.UserServiceFactory"%>
@@ -30,16 +31,18 @@
 		List<Todo> myTodos = new ArrayList<Todo>();
 		List<Todo> otherTodos = new ArrayList<Todo>();
 		List<Todo> myFinishedTodos = new ArrayList<Todo>();
+		Set<String> users = dao.getAllUsers();
 
 		if (user != null) {
 			url = userService.createLogoutURL(request.getRequestURI());
 			urlLinktext = "Logout";
-			myTodos = dao.getTodosByUser(user.getUserId());
-			otherTodos = dao.getOtherTodos(user.getUserId());
-			myFinishedTodos = dao.getFinishedTodosByUser(user.getUserId());
+			myTodos = dao.getTodosByEmail(user.getEmail());
+			otherTodos = dao.getOtherTodos(user.getEmail());
+			myFinishedTodos = dao.getFinishedTodosByEmail(user.getEmail());
+			users.add(user.getEmail());
 		}
-		
-		List<Integer> importance = new ArrayList();
+
+		List<Integer> importance = new ArrayList<Integer>();
 		importance.add(1);
 		importance.add(2);
 		importance.add(3);
@@ -50,12 +53,6 @@
 		importance.add(8);
 		importance.add(9);
 		importance.add(10);
-		
-
-		List<String> users = new ArrayList();
-		users.add("user1");
-		users.add("user2");
-		users.add("user3");
 	%>
 	<div style="width: 100%;">
 		<div class="line"></div>
@@ -82,6 +79,7 @@
 			<th>Long Description</th>
 			<th>URL</th>
 			<th>Done</th>
+			<th>Reassign</th>
 		</tr>
 
 		<%
@@ -91,33 +89,53 @@
 			<td><%=todo.getShortDescription()%></td>
 			<td><%=todo.getLongDescription()%></td>
 			<td><%=todo.getUrl()%></td>
-			<td><a class="done" href="/done?id=<%=todo.getId()%>">Done</a></td>
+			<td>
+				<form action="/done" method="get" accept-charset="utf-8">
+					<input type="hidden" value="<%=todo.getId()%>" name="id">
+					<input type="submit" value="Done" />
+				</form>
+			</td>
+			<td>
+				<form action="/assign" method="post" accept-charset="utf-8">
+					<select name="reassign">
+						<%
+							for (String u : users) {
+						%>
+						<option><%=u%></option>
+						<%
+							}
+						%>
+					</select>
+					<input name="id" type="hidden" value="<%=todo.getId()%>" >
+					<input type="submit" value="Reassign" />
+				</form>
+			</td>
 		</tr>
 		<%
 			}
 		%>
 	</table>
 
-	Ohter have a total number of
+	Other have a total number of
 	<%=otherTodos.size()%>
 	Todos.
 
 	<table>
 		<tr>
+			<th>Owner</th>
 			<th>Short description</th>
 			<th>Long Description</th>
 			<th>URL</th>
-			<th>Done</th>
 		</tr>
 
 		<%
 			for (Todo todo : otherTodos) {
 		%>
 		<tr>
+			<td><%=todo.getAuthor()%></td>
 			<td><%=todo.getShortDescription()%></td>
 			<td><%=todo.getLongDescription()%></td>
 			<td><%=todo.getUrl()%></td>
-			<td><a class="done" href="/done?id=<%=todo.getId()%>">Done</a></td>
 		</tr>
 		<%
 			}
@@ -171,7 +189,7 @@
 					<td><input type="text" name="summary" id="summary" size="65" /></td>
 				</tr>
 				<tr>
-					<td valign="description"><label for="description">Description</label></td>
+					<td><label for="description">Description</label></td>
 					<td><textarea rows="4" cols="50" name="description"
 							id="description"></textarea></td>
 				</tr>
@@ -181,31 +199,27 @@
 				</tr>
 				<tr>
 					<td><label for="user">Assign user</label></td>
-					<td>
-					<select name="user">
-					<%
-						for (String u : users) {
-					%>
-						<option><%=u %></option>
-					<%
-						}
-					%>
-					</select>
-					</td>
+					<td><select name="selecteduser">
+							<%
+								for (String u : users) {
+							%>
+							<option><%=u%></option>
+							<%
+								}
+							%>
+					</select></td>
 				</tr>
 				<tr>
 					<td><label for="importance">Importance</label></td>
-					<td>
-					<select name="importance">
-					<%
-						for (int i : importance) {
-					%>
-						<option><%=i %></option>
-					<%
-						}
-					%>
-					</select>
-					</td>
+					<td><select name="importance">
+							<%
+								for (int i : importance) {
+							%>
+							<option><%=i%></option>
+							<%
+								}
+							%>
+					</select></td>
 				</tr>
 				<tr>
 					<td colspan="2" align="right"><input type="submit"

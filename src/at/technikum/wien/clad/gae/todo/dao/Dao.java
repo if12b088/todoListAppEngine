@@ -1,71 +1,75 @@
 package at.technikum.wien.clad.gae.todo.dao;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
 import at.technikum.wien.clad.gae.todo.model.Todo;
-import at.technikum.wien.clad.gae.todo.model.User;
+
+import com.google.gwt.dev.util.collect.Lists;
 
 public enum Dao {
 	INSTANCE;
 
-//	public List<Todo> listTodos() {
-//		EntityManager em = EMFService.get().createEntityManager();
-//		// read the existing entries
-//		Query q = em
-//				.createQuery("select m from Todo m where m.finished = flase");
-//		List<Todo> todos = q.getResultList();
-//		return todos;
-//	}
-
-	public void add(String userId, String summary, String description,
+	public void add(String email, String summary, String description,
 			String url, Integer importance) {
 		synchronized (this) {
 			EntityManager em = EMFService.get().createEntityManager();
-			Todo todo = new Todo(userId, summary, description, url, importance);
+			Todo todo = new Todo(email, summary, description, url, importance);
 			em.persist(todo);
 			em.close();
 		}
 	}
 
-	public void addUser(String name, String email, String password) {
-		synchronized (this) {
-			EntityManager em = EMFService.get().createEntityManager();
-			User user = new User(name, email, password);
-			em.persist(user);
-			em.close();
+	public Set<String> getAllUsers() {
+		EntityManager em = EMFService.get().createEntityManager();
+		Query q = em
+				.createQuery("select t.author from Todo t group by t.author");
+		Set<String> list = new HashSet<String>();
+		for (Object author : q.getResultList()) {
+			list.add((String) author);
 		}
+		em.close();
+		return list;
 	}
-	
+
 	public List<Todo> getOtherTodos(String userId) {
 		EntityManager em = EMFService.get().createEntityManager();
 		Query q = em
 				.createQuery("select t from Todo t where t.author <> :userId and t.finished = false");
 		q.setParameter("userId", userId);
-		List<Todo> todos = q.getResultList();
-		return todos;
+		return q.getResultList();
 	}
-	
-	public List<Todo> getTodosByUser(String userId) {
+
+	public List<Todo> getTodosByEmail(String email) {
 		EntityManager em = EMFService.get().createEntityManager();
 		Query q = em
-				.createQuery("select t from Todo t where t.author = :userId and t.finished = false");
-		q.setParameter("userId", userId);
+				.createQuery("select t from Todo t where t.author = :email and t.finished = false");
+		q.setParameter("email", email);
 		List<Todo> todos = (List<Todo>) q.getResultList();
 		em.close();
 		return todos;
 	}
-	
-	public List<Todo> getFinishedTodosByUser(String userId) {
+
+	public List<Todo> getFinishedTodosByEmail(String email) {
 		EntityManager em = EMFService.get().createEntityManager();
 		Query q = em
-				.createQuery("select t from Todo t where t.author = :userId and t.finished = true order by importance");
-		q.setParameter("userId", userId);
+				.createQuery("select t from Todo t where t.author = :email and t.finished = true");
+		q.setParameter("email", email);
 		List<Todo> todos = (List<Todo>) q.getResultList();
 		em.close();
+		// List<Todo> sortedList = new ArrayList<Todo>();
+		// for (Todo todo : todos) {
+		//
+		// }
+		Collections.sort(todos);
 		return todos;
 	}
 
@@ -89,5 +93,17 @@ public enum Dao {
 		} finally {
 			em.close();
 		}
+	}
+
+	public void updateAuthor(long id, String user) {
+		EntityManager em = EMFService.get().createEntityManager();
+		try {
+			Todo todo = em.find(Todo.class, id);
+			todo.setAuthor(user);
+			em.merge(todo);
+		} finally {
+			em.close();
+		}
+
 	}
 }

@@ -1,8 +1,8 @@
-<!-- Indices written at Tue, 7 Oct 2014 11:13:39 CEST -->
+<!-- Indices written at Thu, 9 Oct 2014 20:05:38 CEST -->
 
 <datastore-indexes>
 
-    <!-- Used 30 times in query history -->
+    <!-- Used 12 times in query history -->
     <datastore-index kind="Todo" ancestor="false" source="auto">
         <property name="finished" direction="asc"/>
         <property name="author" direction="asc"/>
